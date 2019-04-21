@@ -4,28 +4,26 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.thoughtbot.expandablerecyclerview.listeners.GroupExpandCollapseListener;
-import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableListPosition;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import br.com.danieldlj.goomerlistarango.Model.HourModel;
-import br.com.danieldlj.goomerlistarango.Model.OfertasModel;
 import br.com.danieldlj.goomerlistarango.Model.RestaurantMenuModel;
 import br.com.danieldlj.goomerlistarango.Model.RestaurantModel;
 import br.com.danieldlj.goomerlistarango.R;
@@ -43,13 +41,15 @@ public class ViewRestaurantActivity extends AppCompatActivity {
 
     private RestaurantModel restaurantModel;
     private Toolbar mToolbar;
-    private TextView nome;
-    private TextView descricao;
-    private TextView horario;
+    private TextView nome, descricao, horario;
     private ImageView restaurant_photo;
+    private EditText buscar;
 
     private ApiInterface apiInterface;
     private ArrayList<RestaurantMenuModel> pratos = new ArrayList<>();
+    private ArrayList<TituloModel> tituloModels = new ArrayList<>();
+    private ArrayList<TituloModel> tituloModels_sort = new ArrayList<>();
+
 
     private RecyclerView recyclerView;
     public PratoAdapter adapter;
@@ -63,6 +63,45 @@ public class ViewRestaurantActivity extends AppCompatActivity {
         restaurantModel = (RestaurantModel)intent.getSerializableExtra("restaurant");
         initializaFields();
 
+
+        buscar.addTextChangedListener(new TextWatcher() {
+
+
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                tituloModels_sort.clear();
+                if(TextUtils.isEmpty(buscar.getText().toString())) {
+                    adapter = new PratoAdapter(tituloModels, ViewRestaurantActivity.this);
+                    recyclerView.setAdapter(adapter);
+                }else {
+                    for (TituloModel titulo : tituloModels) {
+                        ArrayList<PratoModel> tempListPrato = new ArrayList<>();
+                        for (PratoModel prato :  titulo.getItems()) {
+                            if(prato.getName().toLowerCase().trim().contains(buscar.getText().toString().toLowerCase().trim())) {
+                                tempListPrato.add(prato);
+                            }
+                        }
+                        if(tempListPrato.size() > 0){
+                            tituloModels_sort.add(new TituloModel(tempListPrato.get(0).getGroup(), tempListPrato));
+                        }else {
+                            if(titulo.getTitle().toLowerCase().trim().contains(buscar.getText().toString().toLowerCase().trim())) {
+                                tituloModels_sort.add(new TituloModel(titulo.getTitle(), titulo.getItems() ));
+                            }
+                        }
+
+                    }
+                    adapter = new PratoAdapter(tituloModels_sort, ViewRestaurantActivity.this);
+                    recyclerView.setAdapter(adapter);
+                }
+
+            }
+        });
+
     }
 
     private void initializaFields() {
@@ -71,6 +110,7 @@ public class ViewRestaurantActivity extends AppCompatActivity {
         descricao = findViewById(R.id.restaurant_description);
         horario = findViewById(R.id.restaurant_horary);
         restaurant_photo = findViewById(R.id.restaurant_photo);
+        buscar = findViewById(R.id.busca);
 
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -120,10 +160,6 @@ public class ViewRestaurantActivity extends AppCompatActivity {
                 pratos = response.body();
                 setData();
 
-/*                for (RestaurantMenuModel meun : pratos){
-                    for (OfertasModel)
-                }*/
-
             }
 
             @Override
@@ -134,8 +170,6 @@ public class ViewRestaurantActivity extends AppCompatActivity {
     }
 
     private void setData() {
-
-        ArrayList<TituloModel> tituloModels = new ArrayList<>();
 
         Map<String, ArrayList<PratoModel>> tituloAndPrato = new HashMap<>();
         for(RestaurantMenuModel prato : pratos){

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -24,8 +25,10 @@ public class PratoAdapter  extends ExpandableRecyclerViewAdapter<TituloViewHolde
 
     private String Tag = "PratoAdapter";
     private Context context;
+    List<? extends ExpandableGroup> groups;
     public PratoAdapter(List<? extends ExpandableGroup> groups , Context context) {
         super(groups);
+        this.groups = groups;
         this.context = context;
     }
 
@@ -56,29 +59,38 @@ public class PratoAdapter  extends ExpandableRecyclerViewAdapter<TituloViewHolde
 
             @Override
             public void run() {
-            ((ViewRestaurantActivity)context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //change View Data
-                        holder.setValor(String.valueOf(pratos.getPrice()),pratos.getSales(),pratos.getName());
-                    }
-                });
-            }
-
+                if (context != null) {
+                    ViewRestaurantActivity viewRestaurantActivity = ((ViewRestaurantActivity) context);
+                    viewRestaurantActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //change View Data
+                            holder.setValor(String.valueOf(pratos.getPrice()), pratos.getSales(), pratos.getName());
+                        }
+                    });
+                  }
+                }
         },
         //Set how long before to start calling the TimerTask (in milliseconds)
         Utils.getMiliSegundos(),
         //Set the amount of time between each execution (in milliseconds)
-        60000);
+        60000); //15 minutos
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(Tag,pratos.getName());
-                holder.openDialog(pratos,context);
+                if(context != null) {
+                    holder.openDialog(pratos, context);
+                }
             }
         });
+    }
+
+    public void updateMenuList(ArrayList<TituloModel> newlist) {
+        this.groups = newlist;
+        this.notifyDataSetChanged();
     }
 
     @Override

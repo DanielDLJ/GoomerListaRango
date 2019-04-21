@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TituloModel extends ExpandableGroup<PratoModel> {
 
-    private String titulo;
+    //private String titulo;
 
 
     public TituloModel(String title, List<PratoModel> items) {
@@ -19,9 +19,9 @@ public class TituloModel extends ExpandableGroup<PratoModel> {
         super(in);
     }
 
-    public String getTitulo() { return titulo; }
+   // public String getTitulo() { return titulo; }
 
-    public void setTitulo(String titulo) { this.titulo = titulo; }
+    //public void setTitulo(String titulo) { this.titulo = titulo; }
 
 
 }
