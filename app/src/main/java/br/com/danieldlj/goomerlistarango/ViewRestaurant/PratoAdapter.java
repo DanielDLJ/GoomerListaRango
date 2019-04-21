@@ -10,8 +10,11 @@ import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import br.com.danieldlj.goomerlistarango.R;
+import br.com.danieldlj.goomerlistarango.Util.Utils;
 import br.com.danieldlj.goomerlistarango.ViewRestaurant.Models.PratoModel;
 import br.com.danieldlj.goomerlistarango.ViewRestaurant.Models.TituloModel;
 import br.com.danieldlj.goomerlistarango.ViewRestaurant.ViewHolder.PratosViewHolder;
@@ -45,6 +48,29 @@ public class PratoAdapter  extends ExpandableRecyclerViewAdapter<TituloViewHolde
         holder.setPratoName(pratos.getName());
         holder.setValor(String.valueOf(pratos.getPrice()),pratos.getSales(),pratos.getName());
         holder.setPhoto(pratos.getImage());
+
+
+        //Declare the timer
+        Timer t = new Timer();
+        t.scheduleAtFixedRate(new TimerTask() {
+
+            @Override
+            public void run() {
+            ((ViewRestaurantActivity)context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //change View Data
+                        holder.setValor(String.valueOf(pratos.getPrice()),pratos.getSales(),pratos.getName());
+                    }
+                });
+            }
+
+        },
+        //Set how long before to start calling the TimerTask (in milliseconds)
+        Utils.getMiliSegundos(),
+        //Set the amount of time between each execution (in milliseconds)
+        60000);
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
