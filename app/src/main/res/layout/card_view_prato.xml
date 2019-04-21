@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView"
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    card_view:cardCornerRadius="5dp"
+    card_view:cardMaxElevation="1dp"
+    card_view:cardElevation="1dp"
+    card_view:cardUseCompatPadding="true"
+    card_view:cardPreventCornerOverlap="false">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/prato_photo"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/restaurant_photo_default"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="16dp" />
+
+        <TextView
+            android:id="@+id/prato_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nome"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_toRightOf="@+id/prato_photo"
+            android:layout_alignParentTop="true" />
+
+        <TextView
+            android:id="@+id/prato_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/descricao"
+            android:textSize="12sp"
+            android:layout_toRightOf="@+id/prato_photo"
+            android:layout_below="@+id/prato_name" />
+
+        <TextView
+            android:id="@+id/prato_valor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="R$ 19,90"
+            android:textSize="16sp"
+            android:textColor="@color/colorDarkCyan"
+            android:layout_toRightOf="@+id/prato_photo"
+            android:layout_below="@+id/prato_description" />
+
+        <TextView
+            android:id="@+id/prato_valor_oferta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="R$ 19,90"
+            android:textSize="12sp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@+id/prato_valor"
+            android:layout_below="@+id/prato_description" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

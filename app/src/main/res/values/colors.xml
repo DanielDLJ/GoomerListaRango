@@ -5,4 +5,7 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="colorGainsboro">#E6E6E6</color>
+
+    <color name="colorDarkCyan">#009CA3</color>
+    darkcyan
 </resources>

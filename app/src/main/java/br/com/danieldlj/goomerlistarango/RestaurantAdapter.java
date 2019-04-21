@@ -17,7 +17,10 @@ import br.com.danieldlj.goomerlistarango.Model.RestaurantModel;
 
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder>{
 
-    ArrayList<RestaurantModel> restaurantModels;
+    private String Tag = "RestaurantAdapter";
+    private ArrayList<RestaurantModel> restaurantModels;
+    private OnItemClickListener mListener;
+
 
     RestaurantAdapter(ArrayList<RestaurantModel> restaurantModels){
         this.restaurantModels = restaurantModels;
@@ -27,7 +30,8 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
     @Override
     public RestaurantViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view_restaurant, viewGroup, false);
-        RestaurantViewHolder restaurantViewHolder = new RestaurantViewHolder(view);
+
+        RestaurantViewHolder restaurantViewHolder = new RestaurantViewHolder(view, mListener);
         return restaurantViewHolder;
     }
 
@@ -59,12 +63,31 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
         TextView restaurant_address;
         ImageView restaurant_photo;
 
-        RestaurantViewHolder(View itemView) {
+        RestaurantViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.cardView);
             restaurant_name = (TextView)itemView.findViewById(R.id.restaurant_name);
             restaurant_address = (TextView)itemView.findViewById(R.id.restaurant_address);
             restaurant_photo = (ImageView)itemView.findViewById(R.id.restaurant_photo);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
     }
 }

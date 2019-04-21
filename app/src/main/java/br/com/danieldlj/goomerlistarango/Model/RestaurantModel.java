@@ -2,9 +2,10 @@ package br.com.danieldlj.goomerlistarango.Model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class RestaurantModel {
+public class RestaurantModel  implements Serializable {
 
     @SerializedName("id")
     private int id;

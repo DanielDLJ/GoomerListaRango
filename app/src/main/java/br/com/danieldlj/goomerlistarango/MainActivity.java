@@ -1,5 +1,6 @@
 package br.com.danieldlj.goomerlistarango;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import br.com.danieldlj.goomerlistarango.Model.RestaurantModel;
 import br.com.danieldlj.goomerlistarango.Rest.ApiClient;
 import br.com.danieldlj.goomerlistarango.Rest.ApiInterface;
+import br.com.danieldlj.goomerlistarango.ViewRestaurant.ViewRestaurantActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -74,6 +76,18 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mLayoutManager);
         adapter = new RestaurantAdapter(restaurants);
         recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new RestaurantAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                if(restaurants_sort.size()> 0){
+                    Log.d(Tag,restaurants_sort.get(position).getName());
+                    goToViewRestaurantActivity(restaurants_sort.get(position));
+                }else {
+                    Log.d(Tag,restaurants.get(position).getName());
+                    goToViewRestaurantActivity(restaurants.get(position));
+                }
+            }
+        });
 
         apiInterface = ApiClient.getClient(this).create(ApiInterface.class);
     }
@@ -100,6 +114,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(Tag,"Failure Message : "+ t.getMessage());
             }
         });
+    }
+
+    public void goToViewRestaurantActivity(RestaurantModel restaurantModel){
+        Intent intent = new Intent(this, ViewRestaurantActivity.class);
+        intent.putExtra("restaurant",restaurantModel);
+        startActivity(intent);
     }
 
 }
