@@ -1,5 +1,7 @@
 package br.com.danieldlj.goomerlistarango.ViewRestaurant.ViewHolder;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +20,8 @@ import java.util.Date;
 import br.com.danieldlj.goomerlistarango.Model.HourModel;
 import br.com.danieldlj.goomerlistarango.Model.OfertasModel;
 import br.com.danieldlj.goomerlistarango.R;
+import br.com.danieldlj.goomerlistarango.ViewRestaurant.Models.PratoModel;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PratosViewHolder extends ChildViewHolder {
 
@@ -113,5 +117,84 @@ public class PratosViewHolder extends ChildViewHolder {
     }
     public void setPhoto(String image) {
         Picasso.get().load(image).placeholder(R.drawable.restaurant_photo_default).into(prato_photo);
+    }
+
+
+    public void openDialog(PratoModel pratoModel, Context context){
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.view_prato_dialog);
+
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        final float[] valor_prato_float = {0};
+        final float[] valor_total_float = {0};
+
+        CircleImageView close_dialog = (CircleImageView) dialog.findViewById(R.id.close_dialog);
+        ImageView ptrato_photo_dialog = (ImageView) dialog.findViewById(R.id.ptrato_photo);
+        TextView prato_nome_dialog = (TextView) dialog.findViewById(R.id.prato_nome);
+        TextView prato_description_dialog = (TextView) dialog.findViewById(R.id.prato_description);
+        TextView prato_valor_dialog = (TextView) dialog.findViewById(R.id.prato_valor);
+        TextView menos_btn = (TextView) dialog.findViewById(R.id.menos_btn);
+        final TextView contador = (TextView) dialog.findViewById(R.id.contador);
+        TextView mais_btn = (TextView) dialog.findViewById(R.id.mais_btn);
+        final TextView valor_total = (TextView) dialog.findViewById(R.id.valor_total);
+
+
+        Picasso.get().load(pratoModel.getImage()).placeholder(R.drawable.restaurant_photo_default).into(ptrato_photo_dialog);
+
+
+        prato_nome_dialog.setText(pratoModel.getName());
+        if(prato_valor.getText().toString().equals("R$ -")){
+            prato_valor_dialog.setText("0");
+            valor_prato_float[0] = 0;
+        }else{
+            if(prato_valor_oferta.getText().toString().equals("")){
+                prato_valor_dialog.setText(prato_valor.getText().toString());
+                valor_prato_float[0] = pratoModel.getPrice();
+            }else {
+                prato_valor_dialog.setText(prato_valor.getText().toString());
+                String valorAux = prato_valor.getText().toString();
+                valorAux = valorAux.substring(valorAux.indexOf(" "),valorAux.length());
+                valor_prato_float[0] = Float.parseFloat(valorAux);
+            }
+        }
+
+        valor_total.setText(String.valueOf(valor_prato_float[0]));
+
+        valor_total_float[0] = valor_prato_float[0];
+        menos_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int cont = Integer.parseInt(contador.getText().toString());
+                if(cont != 0){
+                    cont = cont - 1;
+                    contador.setText(String.valueOf(cont));
+                    valor_total_float[0] = valor_prato_float[0] *cont;
+                    valor_total.setText(String.valueOf(valor_total_float[0]));
+                }
+            }
+        });
+
+        mais_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int cont = Integer.parseInt(contador.getText().toString());
+
+                cont = cont + 1;
+                contador.setText(String.valueOf(cont));
+                valor_total_float[0] = valor_prato_float[0] * cont;
+                valor_total.setText(String.valueOf(valor_total_float[0]));
+            }
+        });
+
+
+        close_dialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 }

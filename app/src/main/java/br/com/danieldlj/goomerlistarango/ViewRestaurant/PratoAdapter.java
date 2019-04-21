@@ -1,5 +1,7 @@
 package br.com.danieldlj.goomerlistarango.ViewRestaurant;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +19,11 @@ import br.com.danieldlj.goomerlistarango.ViewRestaurant.ViewHolder.TituloViewHol
 
 public class PratoAdapter  extends ExpandableRecyclerViewAdapter<TituloViewHolder, PratosViewHolder> {
 
-    public PratoAdapter(List<? extends ExpandableGroup> groups) {
+    private String Tag = "PratoAdapter";
+    private Context context;
+    public PratoAdapter(List<? extends ExpandableGroup> groups , Context context) {
         super(groups);
+        this.context = context;
     }
 
     @Override
@@ -34,12 +39,20 @@ public class PratoAdapter  extends ExpandableRecyclerViewAdapter<TituloViewHolde
     }
 
     @Override
-    public void onBindChildViewHolder(PratosViewHolder holder, int flatPosition, ExpandableGroup group, int childIndex) {
+    public void onBindChildViewHolder(final PratosViewHolder holder, int flatPosition, ExpandableGroup group, int childIndex) {
 
         final PratoModel pratos = ((TituloModel) group).getItems().get(childIndex);
         holder.setPratoName(pratos.getName());
         holder.setValor(String.valueOf(pratos.getPrice()),pratos.getSales(),pratos.getName());
         holder.setPhoto(pratos.getImage());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(Tag,pratos.getName());
+                holder.openDialog(pratos,context);
+            }
+        });
     }
 
     @Override

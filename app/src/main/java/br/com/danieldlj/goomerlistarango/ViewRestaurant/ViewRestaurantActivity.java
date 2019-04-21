@@ -149,7 +149,7 @@ public class ViewRestaurantActivity extends AppCompatActivity {
             tituloModels.add(new TituloModel(key, tituloAndPrato.get(key)));
         }
 
-        adapter = new PratoAdapter(tituloModels);
+        adapter = new PratoAdapter(tituloModels, this);
         recyclerView.setAdapter(adapter);
 
     }
