@@ -23,7 +23,7 @@ public class ApiClient {
             retrofit = new Retrofit.Builder()
                     .baseUrl(Base_URL)
                     .addConverterFactory(GsonConverterFactory.create())
-                    //.client(ok.newBuilder().connectTimeout(30, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS).writeTimeout(30, TimeUnit.SECONDS).build())
+                    .client(ok.newBuilder().connectTimeout(30, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS).writeTimeout(30, TimeUnit.SECONDS).build())
                     .build();
         }
         return retrofit;

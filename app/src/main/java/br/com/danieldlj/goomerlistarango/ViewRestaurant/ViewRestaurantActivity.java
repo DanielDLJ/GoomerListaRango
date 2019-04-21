@@ -29,6 +29,7 @@ import br.com.danieldlj.goomerlistarango.Model.RestaurantModel;
 import br.com.danieldlj.goomerlistarango.R;
 import br.com.danieldlj.goomerlistarango.Rest.ApiClient;
 import br.com.danieldlj.goomerlistarango.Rest.ApiInterface;
+import br.com.danieldlj.goomerlistarango.Util.Utils;
 import br.com.danieldlj.goomerlistarango.ViewRestaurant.Models.PratoModel;
 import br.com.danieldlj.goomerlistarango.ViewRestaurant.Models.TituloModel;
 import retrofit2.Call;
@@ -230,32 +231,12 @@ public class ViewRestaurantActivity extends AppCompatActivity {
     }
 
     private void initializaDate(){
+        StringBuilder data = new StringBuilder();
         for (HourModel horas : restaurantModel.getHours()){
-            for(int i = 0 ; i < horas.getDays().size() ; i++){
-                Log.d(Tag,diaSemana(horas.getDays().get(i)));
-            }
+            data.append(Utils.diasAnalzayze(horas.getDays())).append(horas.getFrom()).append(" às ").append(horas.getTo()).append("\n");
         }
+        horario.setText(data.toString());
     }
 
-    private String diaSemana(int dia){
-        switch (dia){
-            case 1:
-                return "Domingo";
-            case 2:
-                return "Segunda";
-            case 3:
-                return "Terça";
-            case 4:
-                return "Quarta";
-            case 5:
-                return "Quinta";
-            case 6:
-                return "Sexta";
-            case 7:
-                return "Sábado";
-            default:
-                return "";
-        }
-    }
 
 }

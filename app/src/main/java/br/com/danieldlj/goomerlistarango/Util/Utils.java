@@ -1,11 +1,11 @@
 package br.com.danieldlj.goomerlistarango.Util;
 
 import android.annotation.SuppressLint;
-import android.graphics.Paint;
 import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -135,6 +135,52 @@ public class Utils {
 
         Log.d(Tag,"Milissegundos = "+milissegundos);
         return milissegundos;
+    }
+
+    public static String diasAnalzayze(ArrayList<Integer> dias){
+        if(dias.contains(1) && dias.contains(2) && dias.contains(3) && dias.contains(4) && dias.contains(5) && dias.contains(6) && dias.contains(7)){
+            return "Todos os Dias: ";
+        }
+        if( dias.contains(2) && dias.contains(3) && dias.contains(4) && dias.contains(5) && dias.contains(6) ){
+            return "Segunda à Sexta: ";
+        }
+        if( dias.contains(2) && dias.contains(3) && dias.contains(4) && dias.contains(5) ){
+            return "Segunda à Quinta: ";
+        }
+        if( dias.contains(2) && dias.contains(3) && dias.contains(4)  ){
+            return "Segunda à Quarta: ";
+        }
+        if( dias.contains(2) && dias.contains(3) ){
+            return "Segunda à Terça: ";
+        }
+        if(dias.contains(1) && dias.contains(6) && dias.contains(7)){
+            return "Sexta, Sábado e Domingo: ";
+        }
+        if(dias.contains(1)  && dias.contains(7)){
+            return "Sábado e Domingo: ";
+        }
+        return "";
+    }
+
+    private static String diaSemana(int dia){
+        switch (dia){
+            case 1:
+                return "Domingo";
+            case 2:
+                return "Segunda";
+            case 3:
+                return "Terça";
+            case 4:
+                return "Quarta";
+            case 5:
+                return "Quinta";
+            case 6:
+                return "Sexta";
+            case 7:
+                return "Sábado";
+            default:
+                return "";
+        }
     }
 
 }
